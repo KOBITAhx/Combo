@@ -83,6 +83,8 @@ ConfirmButton.MouseButton1Click:Connect(function()
             comboConnection = coroutine.wrap(function()
                 for _, key in ipairs(AssignedKeys) do
                     if not isComboRunning then break end
+                    
+                    -- Presionar y soltar la tecla
                     UserInputService.InputBegan:Fire({
                         UserInputType = Enum.UserInputType.Keyboard,
                         KeyCode = key
@@ -92,7 +94,24 @@ ConfirmButton.MouseButton1Click:Connect(function()
                         UserInputType = Enum.UserInputType.Keyboard,
                         KeyCode = key
                     })
-                    wait(0.7) -- Esperar entre teclas
+
+                    -- Simular clic en una posición aleatoria de la pantalla
+                    local randomPosition = Vector2.new(
+                        math.random(0, game:GetService("Workspace").CurrentCamera.ViewportSize.X),
+                        math.random(0, game:GetService("Workspace").CurrentCamera.ViewportSize.Y)
+                    )
+                    UserInputService.InputBegan:Fire({
+                        UserInputType = Enum.UserInputType.MouseButton1,
+                        Position = randomPosition
+                    })
+                    wait(0.1) -- Simular la presión del clic
+                    UserInputService.InputEnded:Fire({
+                        UserInputType = Enum.UserInputType.MouseButton1,
+                        Position = randomPosition
+                    })
+
+                    -- Esperar antes de pasar a la siguiente tecla
+                    wait(0.7)
                 end
                 isComboRunning = false
                 IniciarButton.Text = "Iniciar"
